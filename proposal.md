@@ -23,3 +23,5 @@ Users will be asked to register for an account in order to use its tools. Otherw
 Users will have the option of adding friends by sending friend requests to another user's username. Users will have a friend list where clicking on a friend will go to their profile and show that user's shelves and books they have in common.
 
 __Stretch Goal__: Have a display log of users' latest actions (adding books to shelves, updating progress on book) as well as their friend's updates.
+
+### LINK TO MODELS: [here](https://dbdiagram.io/d/61b013ce8c901501c0e5c236)
