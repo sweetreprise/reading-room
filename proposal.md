@@ -15,7 +15,6 @@ The data will be coming from the OpenLibrary API [here](https://openlibrary.org/
 - Ability to update how many pages you have read in a book
 - See which books you and a friend have in common
 - Rating a book on a scale of 1-10
-- Message board on user profile ?
 
 ## User Flow
 
