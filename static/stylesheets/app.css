@@ -1,0 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Mochiy+Pop+P+One&family=Montserrat&display=swap');
+
+.navbar .navbar-brand {
+    font-family: Mochiy Pop P One, sans-serif;
+}
+
+.navbar #nav-photo {
+    border-radius: 50%;
+    width: 1.5em;
+    height: 1.5em;
+}

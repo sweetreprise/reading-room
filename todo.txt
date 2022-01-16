@@ -1,0 +1,1 @@
+should i make search bar visible for non logged in users?

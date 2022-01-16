@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Search Results</h1>
+
+{% for book in results %}
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            {% if book['cover_i'] %}
+                <img src="https://covers.openlibrary.org/b/id/{{ book['cover_i'] }}-M.jpg" class="img-fluid rounded-start" alt="...">
+            {% else %}
+                <img src="/static/images/default-book.png" class="img-fluid rounded-start" alt="...">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+            <h5 class="card-title">{{ book['title'] }}</h5>
+            <p class="card-text">{{ ', '.join(book['author_name']) }}</p>
+            <p class="card-text"><small class="text-muted">
+                <b>Published in:</b> {{ book['first_publish_year'] }}<br>
+                {% if book['language'] %}
+                <b>Language:</b> 
+                    <i>{{ ', '.join(book['language']) }}</i>
+                {% endif %}
+            </small></p>
+            </div>
+        </div>
+    </div>
+</div>
+  
+
+{% endfor %}
+{% endblock %} 
+
