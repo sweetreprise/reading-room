@@ -8,9 +8,9 @@
     <div class="row g-0">
         <div class="col-md-4">
             {% if book['cover_i'] %}
-                <img src="https://covers.openlibrary.org/b/id/{{ book['cover_i'] }}-M.jpg" class="img-fluid rounded-start" alt="...">
+                <a href="{{ book['key'] }}"><img src="https://covers.openlibrary.org/b/id/{{ book['cover_i'] }}-M.jpg" class="img-fluid rounded-start" alt="book cover"></a>
             {% else %}
-                <img src="/static/images/default-book.png" class="img-fluid rounded-start" alt="...">
+                <a href="{{ book['key'] }}"><img src="/static/images/default-book.png" class="img-fluid rounded-start" alt="..."></a> 
             {% endif %}
         </div>
         <div class="col-md-8">
@@ -21,8 +21,10 @@
                 <b>Published in:</b> {{ book['first_publish_year'] }}<br>
                 {% if book['language'] %}
                 <b>Language:</b> 
-                    <i>{{ ', '.join(book['language']) }}</i>
+                    <i>{{ ', '.join(book['language']) }}</i><br>
                 {% endif %}
+
+                <b>Editions:</b> {{ book['edition_count'] }}
             </small></p>
             </div>
         </div>
@@ -31,5 +33,7 @@
   
 
 {% endfor %}
+
+
 {% endblock %} 
 

@@ -36,12 +36,19 @@ def load_user(user_id):
 @app.route('/')
 def home():
     """Homepage."""
-    if not current_user.is_authenticated:
-        app.login_manager.unauthorized()
-        form = LoginForm()
-        return render_template('/users/login.html', form=form)
+    # if not current_user.is_authenticated:
+    #     app.login_manager.unauthorized()
+    #     form = LoginForm()
+    #     return render_template('/users/login.html', form=form)
+    # else:
+    #     return render_template('home.html')
+
+    if current_user.is_authenticated:
+        return render_template('/users/dashboard.html')
     else:
-        return render_template('home.html')
+        return render_template('/home.html')
+
+###################### USER ROUTES ########################
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -86,7 +93,7 @@ def login():
 def logout():
     """Logs out user."""
     logout_user()
-    return redirect('login')
+    return redirect('/')
 
 @app.route('/dashboard')
 @login_required
@@ -94,6 +101,8 @@ def dashboard():
     """Displays dashboard."""
     
     return render_template('users/dashboard.html')
+
+###################### SEARCH ROUTE ########################
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -105,6 +114,23 @@ def search():
     json_obj = response.json()
     results = json_obj['docs']
     return render_template('search.html', results=results)
+
+
+@app.route('/works/<string:key>', methods=['GET', 'POST'])
+def get_book_info(key):
+    """Displays info about a specific book: cover, description, editions, author"""
+
+    response = requests.get(f"https://openlibrary.org/works/{ key }.json")
+    json_obj = response.json()
+    
+    return render_template('books/info.html', json=json_obj)
+
+@app.route('/faq')
+def faq():
+    """Displays FAQ"""
+
+    return render_template('/faq.html')
+
 
 
 

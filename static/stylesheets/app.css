@@ -1,11 +1,87 @@
-@import url('https://fonts.googleapis.com/css2?family=Concert+One&family=Mochiy+Pop+P+One&family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Mukta&family=Nanum+Gothic+Coding&display=swap');
+
+
+body {
+    background-color: #f8f9fa;
+    font-family: Nanum Gothic Coding, monospace;
+    color: #2f363b;
+}
+
+/* NAVBAR STYLES */
+.navbar {
+    background-color: #2f363b;
+    color: white;
+    padding: 0.5em 1em 0.5em 1em;
+}
+
+.navbar .dropdown-toggle {
+    color: white;
+}
 
 .navbar .navbar-brand {
-    font-family: Mochiy Pop P One, sans-serif;
+    color: white;
 }
 
 .navbar #nav-photo {
     border-radius: 50%;
     width: 1.5em;
     height: 1.5em;
+}
+
+.navbar .nav-link {
+    color: white;
+}
+
+/* CAROUSEL STYLES */
+#cover-carousel {
+    width: 32em;
+    padding: 2em;
+}
+.carousel .carousel-inner {
+    width: 32em;
+}
+
+.carousel .carousel-inner .carousel-item {
+    width: 32em;
+    height: 100%;
+    background: #f8f9fa;
+}
+
+.carousel .carousel-inner .carousel-item img {
+    position: relative;
+    left: 20%;
+    height: 25em;
+}
+
+/* BOOK INFO // books/info.html */
+.book-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2em;
+    width: 50%;
+    background-color: white;
+}
+
+/* HOMEPAGE */
+.home-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #4d4e4f;
+    border-radius: 5%;
+    background-color: white;
+    text-align: center;
+    width: 40em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.home-intro span {
+    font-weight: bold;
+    color: #4b7694;
 }

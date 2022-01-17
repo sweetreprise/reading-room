@@ -1,1 +1,14 @@
 {% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid home-intro">
+    <h1>Hello there!</h1>
+    <p>Welcome to <span>Reading Room</span></p>
+    <p>Use this app to keep track of your books <i class="fas fa-book"></i></p>
+    <p>Create shelves that hold books you <b>have read</b>, are <b>currently reading</b>, and those you want to <b>read in the future</b>!</p>
+    <p><i class="far fa-star"></i></p>
+    <p>You can use the search bar at the top to look up any book!</p>
+    <p>If you need more info, check out the FAQ <a href="{{ url_for('faq') }}">here</a></p>
+</div>
+
+{% endblock %}

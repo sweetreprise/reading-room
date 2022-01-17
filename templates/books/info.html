@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div id="cover-carousel" class="carousel slide carousel-dark container-fluid" data-bs-ride="carousel" data-bs-interval="false">
+    <div class="carousel-inner">
+        {% if json['covers'] %}
+        <div class="carousel-item active">
+        <img src="https://covers.openlibrary.org/b/id/{{ json['covers'][0] }}-M.jpg" class="d-block w-50" alt="...">
+        </div>
+        {% for cover in json['covers'] %}
+        <div class="carousel-item">
+        <img src="https://covers.openlibrary.org/b/id/{{ cover }}-M.jpg" class="d-block w-50" alt="...">
+        </div>
+        {% endfor %}
+        {% else %}
+            <div class="carousel-item active">
+            <img src="/static/images/default-book.png" class="d-block w-50" alt="...">
+            </div>
+        {% endif %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#cover-carousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#cover-carousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<div class="container-fluid book-info">
+    <h2>{{ json['title'] }}</h2>
+
+    {% if not json['description'] %}
+        <p>Sorry, no description available!</p>
+    {% elif json['description'] and not json['description']['value'] %}
+        <p>{{ json['description'] }}</p>
+    {% else %}
+        <p>{{ json['description']['value'] }}</p>   
+    {% endif %}
+</div>
+
+
+{% endblock %}
