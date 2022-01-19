@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-import datetime
+from datetime import datetime
 
 bcrypt = Bcrypt()
 # connect to the PostgreSQL database
@@ -97,6 +97,18 @@ class User(db.Model, UserMixin):
                 return user
         return False
 
+    def check_unique_username(self, username):
+        """Searches DB for submitted username. Returns False if no match is found, returns True if match is found"""
+
+        if self.username == username:
+            return False
+
+        user = User.query.filter_by(username=username).first()
+
+        if user:
+            return True
+        return False
+
 class Author(db.Model):
     """Author class"""
 
@@ -126,7 +138,7 @@ class Book(db.Model):
     )
     author_key = db.Column(
         db.String(30),
-        db.ForeignKey('authors.key'),
+        db.ForeignKey('authors.key', ondelete='cascade'),
         nullable=False
     )
     description = db.Column(
@@ -151,12 +163,12 @@ class Shelf(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey('users.id'),
+        db.ForeignKey('users.id', ondelete='cascade'),
         primary_key=True
     )
     book_key = db.Column(
         db.String(30),
-        db.ForeignKey('books.key'),
+        db.ForeignKey('books.key', ondelete='cascade'),
         nullable=False
     )
     # options for statuses here will be: reading, finished, future reads
@@ -164,37 +176,20 @@ class Shelf(db.Model):
         db.String(20),
         nullable=False
     )
-
-
-class Progress(db.Model):
-    """Model for tracking a user's progress in a book"""
-
-    __tablename__ = 'progress'
-
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.id'),
-        primary_key=True
-    )
-    book_key = db.Column(
-        db.String(30),
-        db.ForeignKey('books.key'),
-        nullable=False
-    )
-    edition_key = db.Column(
-        db.String(30),
-        nullable=False
+    timestamp = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.utcnow(),
     )
     num_pages = db.Column(
-        db.Integer,
-        nullable=False
+        db.Integer
     )
-    # value for progress will be a numerical value denoting the page number the user is currently on
+    # value for progress will be a numerical value denoting a percentage of a book read
     progress = db.Column(
         db.Integer,
-        nullable=False,
         default=0
     )
+    
 
 class Favourite(db.Model):
     """Class for a user's favourite books"""
@@ -211,7 +206,7 @@ class Favourite(db.Model):
     )
     book_key = db.Column(
         db.Text,
-        db.ForeignKey('books.key')
+        db.ForeignKey('books.key', ondelete='cascade')
     )
 
 class Request(db.Model):
@@ -227,12 +222,12 @@ class Request(db.Model):
     )
     user_a_id = db.Column(
         db.Integer,
-        db.ForeignKey('users.id'),
+        db.ForeignKey('users.id', ondelete='cascade'),
         nullable=False
     )
     user_b_id = db.Column(
         db.Integer,
-        db.ForeignKey('users.id'),
+        db.ForeignKey('users.id', ondelete='cascade'),
         nullable=False
     )
     status = db.Column(

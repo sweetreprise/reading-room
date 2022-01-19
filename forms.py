@@ -34,9 +34,9 @@ class UserEditForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     first_name = StringField('First name', validators=[DataRequired()])
     last_name = StringField('Last name', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[Length(min=8, max=20)])
     description = TextAreaField('Description')
     image_url = TextAreaField('User photo')
+    password = PasswordField('Password', validators=[Length(min=8, max=20)])
 
 # class AddBookToShelfForm(FlaskForm):
 #     """Form for adding a book to a user's shelf"""

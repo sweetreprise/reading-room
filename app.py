@@ -6,9 +6,10 @@ from flask_login import login_user, LoginManager, login_required, logout_user, c
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
 import requests
+import itertools
 
 from models import db, connect_db, User
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, UserEditForm
 
 # CURR_USER_KEY = "current_user"
 
@@ -44,11 +45,17 @@ def home():
     #     return render_template('home.html')
 
     if current_user.is_authenticated:
-        return render_template('/users/dashboard.html')
+        return redirect('/dashboard')
     else:
-        return render_template('/home.html')
+        return render_template('home.html')
 
-###################### USER ROUTES ########################
+@app.route('/faq')
+def faq():
+    """Displays FAQ"""
+
+    return render_template('/faq.html')
+
+###################### REGISTER, LOGIN, LOGOUT ########################
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -64,9 +71,13 @@ def register():
             password=form.password.data
             )
             db.session.commit()
+
         except IntegrityError:
             flash("The username is already taken. Please choose another.", 'danger')
             return render_template('/users/register.html', form=form)
+
+        login_user(new_user)
+        return redirect('/dashboard')
 
     return render_template('users/register.html', form=form)
 
@@ -95,12 +106,6 @@ def logout():
     logout_user()
     return redirect('/')
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    """Displays dashboard."""
-    
-    return render_template('users/dashboard.html')
 
 ###################### SEARCH ROUTE ########################
 
@@ -122,14 +127,70 @@ def get_book_info(key):
 
     response = requests.get(f"https://openlibrary.org/works/{ key }.json")
     json_obj = response.json()
+
+    authors = get_author(json_obj)
+
+    return render_template('books/info.html', json=json_obj, authors=authors)
+
+# helper function
+def get_author(json_obj):
+    """Gets author name from author key derived from a piece of work"""
+    author_key = []
+    authors = []
+
+    for author in json_obj['authors']:
+        author_key.append(author['author']['key'])
     
-    return render_template('books/info.html', json=json_obj)
+    for key in author_key:
+        response = requests.get(f'https://openlibrary.org/{ key }.json')
+        json = response.json()
+        authors.append(json['name'])
+    
+    return authors
 
-@app.route('/faq')
-def faq():
-    """Displays FAQ"""
 
-    return render_template('/faq.html')
+###################### USER ROUTES ########################
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    """Displays dashboard."""
+    
+    return render_template('users/dashboard.html')
+
+@app.route('/<string:username>')
+@login_required
+def profile(username):
+    """Show's user's info."""
+
+    return render_template('users/profile.html')
+
+@app.route('/<string:username>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_user(username):
+    """Edit user details"""
+
+    user = User.query.get_or_404(current_user.id)
+    form = UserEditForm(obj=user)
+
+    if form.validate_on_submit():
+        if User.check_unique_username(user, form.username.data):
+            form.username.errors = ["This username is already taken"]
+        
+        elif User.authenticate(user.username, form.password.data):
+            user.username = form.username.data
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            user.image_url = form.image_url.data
+            user.description = form.description.data
+            db.session.commit()
+
+            return redirect(f'/{user.username}')
+        else:
+            form.password.errors = ['You have entered an invalid password']
+
+    return render_template('users/edit-user.html', form=form)
+
 
 
 

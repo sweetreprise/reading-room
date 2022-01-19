@@ -26,7 +26,7 @@
                 {% if current_user.get_id() != None %}
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="/static/images/default-user.jpeg" id="nav-photo" alt="">
+                    <img src="{{ current_user.image_url }}" id="nav-photo" alt="">
                     </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li class="dropdown-item">Signed in as<br>
@@ -34,7 +34,7 @@
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{ url_for('home') }}">Homepage</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                    <li><a class="dropdown-item" href="#">Your Profile</a></li>
+                    <li><a class="dropdown-item" href="/{{ current_user.username }}">Your Profile</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('faq') }}">FAQ</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid base-container profile-info">
+    <img src="{{ current_user.image_url }}" alt="user image" class="rounded-img"><br>
+    <span><p><b>Username: </b>{{ current_user.username }}</p></span>
+    <span><p><b>First name: </b>{{ current_user.first_name }}</p></span>
+    <span><p><b>Last name: </b>{{ current_user.last_name }}</p></span>
+    <span><p><b>Description: </b>{{ current_user.description }}</p></span>
+    <br>
+    <a href="/{{ current_user.username }}/edit" class="btn btn-sm btn-outline-danger">Edit Profile</a>
+</div>
+
+{% endblock %}
