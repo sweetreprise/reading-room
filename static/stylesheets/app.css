@@ -106,6 +106,15 @@ a:link, a:visited {
     background-color: white;
 }
 
+.add-shelf {
+    margin-bottom: 2em;
+}
+
+/* .add-shelf .col-auto {
+    justify-content: center;
+    align-items: center;
+    padding-top: 1em;
+} */
 
 /* USER PROFILE */
 .profile-info .rounded-img {

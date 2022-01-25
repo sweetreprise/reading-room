@@ -1,7 +1,7 @@
 """Forms for Reading Room"""
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, ValidationError
+from wtforms import StringField, PasswordField, TextAreaField, ValidationError, SelectField
 from wtforms.validators import DataRequired, Length
 from models import User
 
@@ -38,7 +38,9 @@ class UserEditForm(FlaskForm):
     image_url = TextAreaField('User photo')
     password = PasswordField('Password', validators=[Length(min=8, max=20)])
 
-# class AddBookToShelfForm(FlaskForm):
-#     """Form for adding a book to a user's shelf"""
+class AddBookToShelfForm(FlaskForm):
+    """Form for adding a book to a user's shelf"""
+
+    status = SelectField('', choices=[('reading', 'Reading'), ('finished-reading', 'Finished Reading'), ('future-reads', 'Future Reads')])
 
 

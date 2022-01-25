@@ -8,8 +8,8 @@ from sqlalchemy.exc import IntegrityError
 import requests
 import itertools
 
-from models import db, connect_db, User
-from forms import LoginForm, RegisterForm, UserEditForm
+from models import DEFAULT_COVER_IMG, db, connect_db, User, Shelf, Book
+from forms import LoginForm, RegisterForm, UserEditForm, AddBookToShelfForm
 
 # CURR_USER_KEY = "current_user"
 
@@ -123,7 +123,7 @@ def search():
     return render_template('search.html', results=results)
 
 
-@app.route('/works/<string:key>', methods=['GET', 'POST'])
+@app.route('/works/<string:key>', methods=['GET'])
 def get_book_info(key):
     """Displays info about a specific book: cover, description, editions, author"""
 
@@ -131,8 +131,71 @@ def get_book_info(key):
     json_obj = response.json()
 
     authors = get_author(json_obj)
+    form = AddBookToShelfForm()
 
-    return render_template('books/info.html', json=json_obj, authors=authors)
+    return render_template('books/info.html', json=json_obj, authors=authors, form=form, key=key)
+
+@app.route('/works/<string:key>', methods=['POST'])
+def add_book_to_shelf(key):
+    """Adds book to a user's shelf"""
+
+    user = User.query.get_or_404(current_user.id)
+    status = request.form['status']
+    progress = Shelf.check_progress(status)
+
+    #if book object does not already exist, create book object
+    if not Book.check_book(key):
+        create_book_obj(key)
+
+    entry = Shelf.check_existing(user.id, key)
+
+    #checks if book is already part of a user's shelf
+    ## if it is, changes the status based on the form
+    ### if not, creates new entry and adds to shelf
+    if entry:
+            entry.status=status
+            entry.progress=progress
+    else:
+        entry = Shelf(
+            user_id=user.id,
+            book_key=key,
+            status=status,
+            progress=progress
+        )
+    db.session.add(entry)
+    db.session.commit()
+
+    flash('Successfully added to your shelf!', 'success')
+
+    return redirect(f'/works/{key}')
+
+# helper function
+def create_book_obj(key):
+    """Creates a book object and commits to database"""
+
+    response = requests.get(f"https://openlibrary.org/works/{ key }.json")
+    json = response.json()
+
+    title = json['title']
+    author_name = get_author(json)
+    desc = json['description']
+
+    if json['covers']:
+        cover = json['covers'][0]
+    else:
+        cover = DEFAULT_COVER_IMG
+
+    new_book = Book(
+        key=key,
+        title=title,
+        author_name=author_name,
+        description=desc,
+        cover=cover
+    )
+
+    db.session.add(new_book)
+    db.session.commit()
+
 
 # helper function
 def get_author(json_obj):
@@ -192,6 +255,14 @@ def edit_user(username):
             form.password.errors = ['You have entered an invalid password']
 
     return render_template('users/edit-user.html', form=form)
+
+
+###################### SHELF ROUTES ########################
+
+
+
+
+
 
 
 

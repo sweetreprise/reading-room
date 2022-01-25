@@ -16,7 +16,7 @@
 {% endwith %}
 
 <div class="row justify-content-center">
-    <div class="col-md-6 row justify-content-center">
+    <div class="col-md-6">
         <form action="{{ url_for('register') }}" method="POST">
             {{ form.hidden_tag() }}
             {% for field in form if (field.widget.input_type != 'hidden') %}
@@ -35,5 +35,6 @@
         </form>
     </div>
 </div>
+
 
 {% endblock %}

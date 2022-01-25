@@ -30,6 +30,34 @@
     </button>
 </div>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <section class="messages">
+        {% for category, msg in messages %}
+        <p class="text-center text-{{ category }}">{{ msg }}</p>
+        {% endfor %}
+    </section>
+    {% endif %}
+{% endwith %}
+
+<div class="d-flex justify-content-center add-shelf">
+    <form class="row g-3" method="POST" action="/works/{{ key }}">
+        {{ form.hidden_tag() }}
+        {% for field in form if (field.widget.input_type != 'hidden') %}
+        <div class="col-auto">
+            {{ form.status.label }}
+        </div>
+        <div class="col-auto">
+            {{ form.status(class_="form-control")}}
+        </div>
+        {% endfor %}
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Add to shelf</button>
+        </div>
+    </form>
+</div>
+  
+
 <div class="container-fluid book-info">
     <h2>{{ json['title'] }}</h2>
     <h5>By: {{ ', '.join(authors) }}</h5>
@@ -42,5 +70,6 @@
         <p>{{ json['description']['value'] }}</p>   
     {% endif %}
 </div>
+
 
 {% endblock %}

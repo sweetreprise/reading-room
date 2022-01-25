@@ -109,19 +109,6 @@ class User(db.Model, UserMixin):
             return True
         return False
 
-class Author(db.Model):
-    """Author class"""
-
-    __tablename__ = 'authors'
-
-    key = db.Column(
-        db.String(30),
-        primary_key=True
-    )
-    name = db.Column(
-        db.String(50),
-        nullable=False
-    )
 
 class Book(db.Model):
     """Book class"""
@@ -136,23 +123,28 @@ class Book(db.Model):
         db.String(100),
         nullable=False
     )
-    author_key = db.Column(
-        db.String(30),
-        db.ForeignKey('authors.key', ondelete='cascade'),
+    author_name = db.Column(
+        db.String(50),
         nullable=False
     )
     description = db.Column(
         db.Text,
         nullable=False
     )
-    publish_date = db.Column(
-        db.String(30),
-        nullable=False
-    )
     cover = db.Column(
         db.Text,
         default=DEFAULT_COVER_IMG
     )
+
+    @classmethod
+    def check_book(cls, key):
+    
+        book = cls.query.filter_by(key=key).first()
+
+        if book:
+            return True
+        return False
+        
 
 
 class Shelf(db.Model):
@@ -161,10 +153,15 @@ class Shelf(db.Model):
 
     __tablename__ = 'shelves'
 
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
     user_id = db.Column(
         db.Integer,
         db.ForeignKey('users.id', ondelete='cascade'),
-        primary_key=True
+        nullable=False
     )
     book_key = db.Column(
         db.String(30),
@@ -189,6 +186,30 @@ class Shelf(db.Model):
         db.Integer,
         default=0
     )
+
+    @classmethod
+    def check_existing(cls, user_id, book_key):
+        """checks if the book a user is adding to their shelf already exists on their shelf"""
+        user_books = cls.query.filter_by(user_id=user_id)
+
+        for entry in user_books:
+            if entry.book_key == book_key:
+                return entry
+        return False
+
+    @classmethod
+    def check_progress(cls, status):
+
+        if status == 'finished-reading':
+            progress = 100
+        else:
+            progress = 0
+        
+        return progress
+
+
+
+
     
 
 class Favourite(db.Model):
