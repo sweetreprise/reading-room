@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container" id="shelves-container">
+    <h3>Reading</h3>
+    <table id="reading">
+        <tr>
+            <th>Title</th>
+            <th>Author Name</th>
+            <th>Pages</th>
+            <th>Progress</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for book in reading %}
+        <tr>
+            <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
+            <td>{{ book.book.author_name }}</td>
+            <td>{{ book.num_pages }}</td>
+            <td>{{ book.progress }}</td>
+            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/edit">Edit</a></td>
+            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/delete">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Finished Reading</h3>
+    <table id="finished-reading">
+        <tr>
+            <th>Title</th>
+            <th>Author Name</th>
+            <th>Pages</th>
+            <th>Progress</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for book in finished_reading %}
+        <tr>
+            <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
+            <td>{{ book.book.author_name }}</td>
+            <td>{{ book.num_pages }}</td>
+            <td>{{ book.progress }}</td>
+            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/edit">Edit</a></td>
+            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/delete">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Future Reads</h3>
+    <table id="future-reads">
+        <tr>
+            <th>Title</th>
+            <th>Author Name</th>
+            <th>Pages</th>
+            <th>Progress</th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for book in future_reads %}
+        <tr>
+            <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
+            <td>{{ book.book.author_name }}</td>
+            <td>{{ book.num_pages }}</td>
+            <td>{{ book.progress }}</td>
+            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/edit">Edit</a></td>
+            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/delete">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+  
+  
+{% endblock %}

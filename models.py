@@ -65,10 +65,13 @@ class User(db.Model, UserMixin):
         secondary="favourites"
     )
 
+    shelves = db.relationship('Shelf')
+
     def __repr__(self):
         """Provides some helpful representation about the user when printed."""
 
         return f"<User #{self.id}: {self.username}"
+
     
     @classmethod
     def register(cls, username, first_name, last_name, password):
@@ -144,7 +147,6 @@ class Book(db.Model):
         if book:
             return True
         return False
-        
 
 
 class Shelf(db.Model):
@@ -187,6 +189,8 @@ class Shelf(db.Model):
         default=0
     )
 
+    book = db.relationship('Book')
+
     @classmethod
     def check_existing(cls, user_id, book_key):
         """checks if the book a user is adding to their shelf already exists on their shelf"""
@@ -207,10 +211,6 @@ class Shelf(db.Model):
         
         return progress
 
-
-
-
-    
 
 class Favourite(db.Model):
     """Class for a user's favourite books"""

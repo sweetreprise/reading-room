@@ -1,7 +1,7 @@
 """Forms for Reading Room"""
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, ValidationError, SelectField
+from wtforms import StringField, PasswordField, TextAreaField, ValidationError, SelectField, IntegerField
 from wtforms.validators import DataRequired, Length
 from models import User
 
@@ -42,5 +42,14 @@ class AddBookToShelfForm(FlaskForm):
     """Form for adding a book to a user's shelf"""
 
     status = SelectField('', choices=[('reading', 'Reading'), ('finished-reading', 'Finished Reading'), ('future-reads', 'Future Reads')])
+
+class EditBookForm(FlaskForm):
+    """Form for a user to edit a book on their shelf"""
+
+    status = SelectField('', choices=[('reading', 'Reading'), ('finished-reading', 'Finished Reading'), ('future-reads', 'Future Reads')])
+    num_pages = IntegerField('Number of pages')
+    progress = IntegerField('Progress')
+
+    
 
 

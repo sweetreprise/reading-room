@@ -14,7 +14,7 @@ body h1 {
 
 a:link, a:visited {
     color: #2f363b;
-    text-decoration: none;
+    cursor: pointer;
 }
 
 /* NAVBAR STYLES */
@@ -68,8 +68,42 @@ a:link, a:visited {
 }
 
 /* DASHBOARD */
-#dashboard div {
-    border: 1px solid black;
+
+#dashboard {
+    margin-top: 3em;
+}
+
+#dashboard .user-info {
+    text-align: center;
+}
+
+#dashboard .user-info .friends {
+    text-align: left;
+}
+
+#dashboard .user-img {
+    border-radius: 50%;
+    width: 10em;
+    height: 10em;
+    margin: auto;
+}
+
+#dashboard .friends {
+    border: 0.5px solid #777;
+}
+
+#dashboard section {
+    padding: 1em;
+    border: 0.5px solid #777;
+}
+
+#dashboard section img {
+    margin: 0.5em;
+}
+
+#dashboard .arrow {
+    float: right;
+    font-size: small;
 }
 
 
@@ -110,11 +144,6 @@ a:link, a:visited {
     margin-bottom: 2em;
 }
 
-/* .add-shelf .col-auto {
-    justify-content: center;
-    align-items: center;
-    padding-top: 1em;
-} */
 
 /* USER PROFILE */
 .profile-info .rounded-img {
@@ -131,4 +160,31 @@ a:link, a:visited {
 
 .profile-info {
     text-align: left;
+}
+
+/* SHELVES */
+
+#reading, #finished-reading, #future-reads {
+    font-size: small;
+}
+
+#shelves-container th {
+    background-color: #2f363b;
+    color: white;
+}
+
+.container tr:nth-of-type(odd) {
+    background-color: #d3dee6;
+}
+
+.container tr:nth-of-type(even) {
+    background-color: white;
+}
+
+.container td {
+    padding: 0 1em 0 1em;
+}
+
+.container th {
+    padding-left: 1em;
 }

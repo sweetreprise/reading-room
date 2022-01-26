@@ -1,3 +1,4 @@
 - should i make search bar visible for non logged in users?
 - upload form for editing profile photo
 - search template??? (GET)
+- add scoring for books

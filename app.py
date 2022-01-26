@@ -9,7 +9,7 @@ import requests
 import itertools
 
 from models import DEFAULT_COVER_IMG, db, connect_db, User, Shelf, Book
-from forms import LoginForm, RegisterForm, UserEditForm, AddBookToShelfForm
+from forms import LoginForm, RegisterForm, UserEditForm, AddBookToShelfForm, EditBookForm
 
 # CURR_USER_KEY = "current_user"
 
@@ -136,6 +136,7 @@ def get_book_info(key):
     return render_template('books/info.html', json=json_obj, authors=authors, form=form, key=key)
 
 @app.route('/works/<string:key>', methods=['POST'])
+@login_required
 def add_book_to_shelf(key):
     """Adds book to a user's shelf"""
 
@@ -177,8 +178,10 @@ def create_book_obj(key):
     json = response.json()
 
     title = json['title']
-    author_name = get_author(json)
-    desc = json['description']
+    author_names = get_author(json)
+    author_string = ', '.join([str(author) for author in author_names])
+    
+    desc = check_valid_desc(json)
 
     if json['covers']:
         cover = json['covers'][0]
@@ -188,13 +191,25 @@ def create_book_obj(key):
     new_book = Book(
         key=key,
         title=title,
-        author_name=author_name,
+        author_name=author_string,
         description=desc,
         cover=cover
     )
 
     db.session.add(new_book)
     db.session.commit()
+
+# helper function
+def check_valid_desc(json):
+    """parses out a book's description based on the format recieved in the request"""
+    if 'description' not in json.keys():
+        desc = "No description available"
+    elif type(json['description']) == str:
+        desc = json['description']
+    else:
+        desc = json['description']['value']
+
+    return desc
 
 
 # helper function
@@ -220,8 +235,35 @@ def get_author(json_obj):
 @login_required
 def dashboard():
     """Displays dashboard."""
-    
-    return render_template('users/dashboard.html')
+
+    user = User.query.get_or_404(current_user.id)
+    shelves = user.shelves
+
+    # shelves = Shelf.query.filter_by(user_id=user.id).order_by("title")
+
+    books_array = get_books_array(shelves)
+    reading = books_array[0]
+    finished_reading = books_array[1]
+    future_reads = books_array[2]
+
+    return render_template('users/dashboard.html', user=user, reading=reading, finished_reading=finished_reading, future_reads=future_reads)
+
+#helper function
+def get_books_array(shelves):
+    """Returns an array of arrays. Each nested array is sorted from their status"""
+    reading = []
+    finished_reading = []
+    future_reads = []
+
+    for book in shelves:
+        if book.status == 'reading':
+            reading.append(book)
+        elif book.status == 'finished-reading':
+            finished_reading.append(book)
+        else:
+            future_reads.append(book)
+
+    return [reading, finished_reading, future_reads]
 
 @app.route('/<string:username>')
 @login_required
@@ -258,6 +300,39 @@ def edit_user(username):
 
 
 ###################### SHELF ROUTES ########################
+
+@app.route('/<string:username>/shelves')
+@login_required
+def shelves(username):
+    """shows user's shelves"""
+
+    user = User.query.get_or_404(current_user.id)
+    shelves = user.shelves
+
+    books_array = get_books_array(shelves)
+    reading = books_array[0]
+    finished_reading = books_array[1]
+    future_reads = books_array[2]
+
+    return render_template('users/shelves.html', user=user, reading=reading, finished_reading=finished_reading, future_reads=future_reads)
+
+@app.route('/<string:username>/shelves/<string:book_key>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_book(username, book_key):
+    """Edits a book on a user's shelf"""
+
+    user = User.query.get_or_404(current_user.id)
+    form = EditBookForm()
+
+    return render_template('books/edit-book.html', form=form, user=user)
+
+@app.route('/<string:username>/shelves/<string:book_key>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_book(username, book_key):
+    """Deletes a book from a user's shelf"""
+
+    return render_template('books/delete-book.html')
+
 
 
 
