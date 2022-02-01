@@ -23,6 +23,37 @@ def connect_db(app):
 #########################################################
 # Models
 
+class Request(db.Model):
+    """Connection between two users. Friends can see specific
+    information about each other"""
+
+    __tablename__ = "requests"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+    user_a_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='cascade'),
+        nullable=False
+    )
+    user_b_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='cascade'),
+        nullable=False
+    )
+    status = db.Column(
+        db.String(15),
+        nullable=False
+    )
+
+    user_a = db.relationship('User', foreign_keys=[user_a_id], backref="sent_requests")
+
+    user_b = db.relationship('User', foreign_keys=[user_b_id], backref="received_requests")
+
+
 class User(db.Model, UserMixin):
     """User class"""
 
@@ -66,6 +97,8 @@ class User(db.Model, UserMixin):
     )
 
     shelves = db.relationship('Shelf')
+
+
 
     def __repr__(self):
         """Provides some helpful representation about the user when printed."""
@@ -181,15 +214,24 @@ class Shelf(db.Model):
         default=datetime.utcnow(),
     )
     num_pages = db.Column(
-        db.Integer
+        db.Integer,
+        default=0
+    )
+    pages_read = db.Column(
+        db.Integer,
+        default=0
     )
     # value for progress will be a numerical value denoting a percentage of a book read
     progress = db.Column(
         db.Integer,
         default=0
     )
+    # score = db.Column(
+    #     db.Integer,
+    #     default=None
+    # )
 
-    book = db.relationship('Book')
+    book = db.relationship('Book', order_by='desc(Book.title)')
 
     @classmethod
     def check_existing(cls, user_id, book_key):
@@ -202,13 +244,19 @@ class Shelf(db.Model):
         return False
 
     @classmethod
-    def check_progress(cls, status):
+    def calculate_progress(cls, status, num_pages, pages_read):
+        """Calculates a user's progress through a book."""
 
-        if status == 'finished-reading':
+        if status == 'reading':
+            if num_pages is not 0:
+                progress = int((pages_read / num_pages) * 100)
+            else:
+                progress = 0
+        elif status == 'finished-reading':
             progress = 100
         else:
             progress = 0
-        
+
         return progress
 
 
@@ -230,31 +278,4 @@ class Favourite(db.Model):
         db.ForeignKey('books.key', ondelete='cascade')
     )
 
-class Request(db.Model):
-    """Connection between two users. Friends can see specific
-    information about each other"""
 
-    __tablename__ = "requests"
-
-    id = db.Column(
-        db.Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-    user_a_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.id', ondelete='cascade'),
-        nullable=False
-    )
-    user_b_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.id', ondelete='cascade'),
-        nullable=False
-    )
-    status = db.Column(
-        db.String(15),
-        nullable=False
-    )
-
-    user_a = db.relationship('User', foreign_keys=[user_a_id], backref="sent_requests")
-    user_b = db.relationship('User', foreign_keys=[user_b_id], backref="received_requests")
