@@ -248,7 +248,7 @@ class Shelf(db.Model):
         """Calculates a user's progress through a book."""
 
         if status == 'reading':
-            if num_pages is not 0:
+            if num_pages != 0:
                 progress = int((pages_read / num_pages) * 100)
             else:
                 progress = 0
