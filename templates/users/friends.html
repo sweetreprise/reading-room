@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Friends</h1>
+
+<!-- Friend Search Bar -->
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form class="d-flex" action="/friends/search">
+            <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Find Friend" name="q">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+
+<!-- Flash messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <section class="messages">
+        {% for category, msg in messages %}
+        <p class="text-center text-{{ category }}">{{ msg }}</p>
+        {% endfor %}
+    </section>
+    {% endif %}
+{% endwith %}
+
+
+<div class="container">
+    <!-- Nav Pills -->
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="friends-tab" data-bs-toggle="pill" data-bs-target="#pills-friends" type="button" role="tab" aria-controls="pills-friends" aria-selected="true">Friends</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="received-tab" data-bs-toggle="pill" data-bs-target="#pills-received" type="button" role="tab" aria-controls="pills-received" aria-selected="false">Received</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="sent-tab" data-bs-toggle="pill" data-bs-target="#pills-sent" type="button" role="tab" aria-controls="pills-sent" aria-selected="false">Sent</button>
+        </li>
+    </ul>  
+      
+    <div class="tab-content">
+        <!-- Friends tab content -->
+        <div class="tab-pane fade show active" id="pills-friends" role="tabpanel" aria-labelledby="pills-home-tab">
+            {% if friends %}
+                {% for friend in f1 %}
+                    <div>
+                        <a href="/{{ friend.user_b.username }}">
+                            <img src="{{ friend.user_b.image_url }} " alt="User Profile Image" class="friend-img">
+                        </a><br>
+                        <a href="">@{{ friend.user_b.username }}a>
+                    </div>
+                {% endfor %}
+                {% for friend in f2 %}
+                    <div>
+                        <a href="/{{ friend.user_a.username }}">
+                            <img src="{{ friend.user_a.image_url }} " alt="User Profile Image" class="friend-img">
+                        </a><br>
+                        <a href="">@{{ friend.user_a.username }}</a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>You don't have any friends <i class="far fa-frown"></i> Use the search bar above to find some!</p>
+            {% endif %}
+        </div>
+
+        <!-- Received friend requests content -->
+        <div class="tab-pane fade" id="pills-received" role="tabpanel" aria-labelledby="pills-profile-tab">
+            {% if received %}
+                {% for friend in received %}
+                <div>
+                    <a href="/{{ friend.user_a.username }}">
+                        <img src="{{ friend.user_a.image_url }} " alt="User Profile Image" class="friend-img">
+                    </a><br>
+                    <a href="/{{ friend.user_a.username }}">@{{ friend.user_a.username }}</a>
+    
+                    <form action="/friends/accept/{{ friend.user_a.id }}" method="POST">
+                        <button class="btn btn-sm btn-outline-success">Accept</button>
+                    </form>
+                    <form action="/friends/delete/{{ friend.user_a.id }}" method="POST">
+                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </div>
+                {% endfor %}
+
+            {% else %}
+                <p>You have received 0 friend requests.</p>
+            {% endif %}
+        </div>
+
+        <!-- Sent friend requests content -->
+        <div class="tab-pane fade" id="pills-sent" role="tabpanel" aria-labelledby="pills-contact-tab">
+            {% if sent %}
+                {% for friend in sent %}
+                <div>
+                    <a href="/{{ friend.user_b.username }}">
+                        <img src="{{ friend.user_b.image_url }}" alt="User profile image" class="friend-img">
+                    </a><br>
+                    <a href="/{{ friend.user_b.username }}">@{{ friend.user_b.username }}</a>
+                    <form action="/friends/delete/{{ friend.user_b.id }}" method="POST">
+                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </div>
+                {% endfor %}
+
+            {% else %}
+                <p>You have no friend requests sent.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+  
+{% endblock %}
