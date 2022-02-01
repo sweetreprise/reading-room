@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>{{ user.username }}'s bookshelf</h2>
+
+<div class="container" id="shelves-container">
+    <span>
+        {% if reading or empty %}
+        Reading |
+        <a href="/shelves/{{ user.username }}/1"> Finished Reading</a> |
+        <a href="/shelves/{{ user.username }}/2"> Future Reads</a>
+        {% elif finished_reading or empty %}
+        <a href="/shelves/{{ user.username }}/0">Reading</a> |
+        Finished Reading |
+        <a href="/shelves/{{ user.username }}/2"> Future Reads</a>
+        {% else %}
+        <a href="/shelves/{{ user.username }}/0">Reading</a> |
+        <a href="/shelves/{{ user.username }}/1">Finished Reading</a> | 
+        Future Reads
+        {% endif %}
+    </span>
+
+    <!-- If there are no books in a shelf, display empty message -->
+    {% if empty %}
+    <p>This user has no books <i class="far fa-frown"></i></p>
+
+    <!-- Shows READING entries -->
+    {% elif reading %}
+    <h3>Reading</h3>
+    <table id="reading">
+        <tr>
+            <th>Title</th>
+            <th>Author Name</th>
+            <th>Pages</th>
+            <th>Progress</th>
+        </tr>
+        {% for book in reading %}
+        <tr>
+            <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
+            <td>{{ book.book.author_name }}</td>
+            <td>{{ book.num_pages }}</td>
+            <td>{{ book.progress }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Shows FINISHED READING entries -->
+    {% elif finished_reading %}
+    <h3>Finished Reading</h3>
+    <table id="finished-reading">
+        <tr>
+            <th>Title</th>
+            <th>Author Name</th>
+            <th>Pages</th>
+            <th>Progress</th>
+        </tr>
+        {% for book in finished_reading %}
+        <tr>
+            <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
+            <td>{{ book.book.author_name }}</td>
+            <td>{{ book.num_pages }}</td>
+            <td>{{ book.progress }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Shows FUTURE READS entries -->
+    {% else %}
+    <h3>Future Reads</h3>
+    <table id="future-reads">
+        <tr>
+            <th>Title</th>
+            <th>Author Name</th>
+            <th>Pages</th>
+            <th>Progress</th>
+        </tr>
+        {% for book in future_reads %}
+        <tr>
+            <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
+            <td>{{ book.book.author_name }}</td>
+            <td>{{ book.num_pages }}</td>
+            <td>{{ book.progress }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+
+
+  
+{% endblock %}
