@@ -5,7 +5,6 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy_searchable import search
 import requests
 
 from models import DEFAULT_COVER_IMG, db, connect_db, User, Shelf, Book, Request
