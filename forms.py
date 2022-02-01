@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, ValidationError, SelectField, IntegerField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, Optional, NumberRange
 from models import User
 
 class RegisterForm(FlaskForm):
@@ -11,7 +11,7 @@ class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     first_name = StringField('First name', validators=[DataRequired()])
     last_name = StringField('Last name', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[Length(min=8, max=20)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20)])
 
     # @classmethod
     # def validate_username(self, username):
@@ -46,9 +46,10 @@ class AddBookToShelfForm(FlaskForm):
 class EditBookForm(FlaskForm):
     """Form for a user to edit a book on their shelf"""
 
-    status = SelectField('', choices=[('reading', 'Reading'), ('finished-reading', 'Finished Reading'), ('future-reads', 'Future Reads')])
-    num_pages = IntegerField('Number of pages')
-    progress = IntegerField('Progress')
+    status = SelectField('Status', choices=[('reading', 'Reading'), ('finished-reading', 'Finished Reading'), ('future-reads', 'Future Reads')])
+    num_pages = IntegerField('Number of pages', default=0, validators=[Optional(), NumberRange(min=0)])
+    pages_read = IntegerField('Pages Read', default=0, validators=[Optional(), NumberRange(min=0)])
+
 
     
 
