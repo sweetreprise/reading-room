@@ -1,5 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-FAQ
+<div class="container" id='faq'>
+    <h1>FAQ</h1>
+    <h4>What is Reading Room?</h4>
+    <p>Reading Room is a web application that tracks all the books in your life! Add books you are currently reading, finished reading and those you want to read in the future on your virtual bookshelves. You can even add your friends to see what they're reading!</p>
+
+    <h4>How do I add books to my shelf?</h4>
+    <p>Using the search bar at the top right of the navigation, enter a book title or author! From there you will be able to quick-add a book to your shelf from the search results page, or on a book's info page by clicking on the book. Alternatively, you can use the search page <a href="/search">here</a>.
+    </p>
+
+    <h4>How do I add friends?</h4>
+    <p>Head over to the <a href="/friends">Friends</a> page using the dropdown menu. From there you will be able to search for a another user through their username. Click on the 'Add Friend' button under their profile and a friend request will be sent to them! Once you are friends, you'll be able to see their bookshelf!</p>
+
+    <h4>Can I change my username?</h4>
+    <p>Absolutely. Go to <a href="/{{ current_user.username }}">your profile</a> and you will see a button to edit your user details. Your new username must be unique so it may take a few tries!</p>
+
+    <h4>How do I track progress for book I'm a reading?</h4>
+    <p>If you navigate to a book's info page, there is a form that allows you to enter the number of pages there are for the edition of your book (you will have to provide this info yourself!) as well as the number of pages you have read! Once you submit this, your progress for that book will be recorded on your shelf! Of course, you can edit your progress as you read!</p>
+
+    <h4>Will you be adding additional features?</h4>
+    <p>Yes! Eventually I would will be implementing a feed showing the latest book updates from you and your friends, which will be shown on your Dashboard! There are a few other features I would love to add in the future, such as messaging, notifications and customizable lists.</p>
+
+    <h4>Where can I find you?</h4>
+    <p>You can find me on <a href="https://github.com/sweetreprise">GitHub <i class="fab fa-github-alt"></i></a> and <a href="https://www.linkedin.com/in/maria-html/">LinkedIn!</a> Thank you for visiting the site!</p>
+
+    <img src="https://media4.giphy.com/media/ptWnqsQeK51VS/giphy.gif?cid=ecf05e4793w0g4u2btifk3drqkv8jklmu304twv0x0t6ei5e&rid=giphy.gif&ct=g" alt="Pokemon Spinda">
+
+</div>
 {% endblock %}
