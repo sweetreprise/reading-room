@@ -1,4 +1,5 @@
-- should i make search bar visible for non logged in users?
+
 - upload form for editing profile photo
-- search template??? (GET)
-- add scoring for books
+- pagination for results
+- 404 page
+- add loc in user class
