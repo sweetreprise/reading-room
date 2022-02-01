@@ -1,41 +1,73 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Search Results</h1>
 
-{% for book in results %}
-<div class="card mb-3" style="max-width: 540px;">
-    <div class="row g-0">
-        <div class="col-md-4">
-            {% if book['cover_i'] %}
-                <a href="{{ book['key'] }}"><img src="https://covers.openlibrary.org/b/id/{{ book['cover_i'] }}-M.jpg" class="img-fluid rounded-start" alt="book cover"></a>
-            {% else %}
-                <a href="{{ book['key'] }}"><img src="/static/images/default-book.png" class="img-fluid rounded-start" alt="..."></a> 
-            {% endif %}
-        </div>
-        <div class="col-md-8">
-            <div class="card-body">
-            <a href="{{ book['key'] }}"><h5 class="card-title">{{ book['title'] }}</h5></a>
-            <p class="card-text">{{ ', '.join(book['author_name']) }}</p>
-            <p class="card-text"><small class="text-muted">
-                <b>Published in:</b> {{ book['first_publish_year'] }}<br>
-                {% if book['language'] %}
-                <b>Language:</b> 
-                    <i>{{ ', '.join(book['language']) }}</i><br>
+{% if results %}
+<div class="container">
+    <h3 class="search-header">Search Results for...</h3>
+    <span class="search-term">"{{ search }}"</span>
+
+    <!-- Card -->
+    {% for book in results %}
+    <div class="card mb-3 search-card">
+        <div class="row g-0">
+            <div class="col-md-4">
+                {% if book['cover_i'] %}
+                    <a href="{{ book['key'] }}"><img src="https://covers.openlibrary.org/b/id/{{ book['cover_i'] }}-M.jpg" class="img-fluid rounded-start" alt="book cover"></a>
+                {% else %}
+                    <a href="{{ book['key'] }}"><img src="/static/images/default-book.png" class="img-fluid rounded-start" alt="..."></a> 
                 {% endif %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <a href="{{ book['key'] }}"><h5 class="card-title">{{ book['title'] }}</h5></a>
+                    <p class="card-text">{{ ', '.join(book['author_name']) }}</p>
+                    <p class="card-text"><small class="text-muted">
+                        <b>Published in:</b> {{ book['first_publish_year'] }}<br>
+                        {% if book['language'] %}
+                        <b>Language:</b> 
+                            <i>{{ ', '.join(book['language']) }}</i><br>
+                        {% endif %}
+                        <b>Editions:</b> {{ book['edition_count'] }}
+                    </small></p>
 
-                <b>Editions:</b> {{ book['edition_count'] }}
-            </small></p>
+                    <!-- Quick add Form -->
+                    <p class="card-text">
+                        <form data-id="{{ book['key'] }}" class="row g-3 add-to-shelf" method="POST" action="{{ book['key'] }}">
+                            {{ form.hidden_tag() }}
+                            {% for field in form if (field.widget.input_type != 'hidden') %}
+                            <div class="col-auto">
+                                {{ form.status.label }}
+                            </div>
+                            <div class="col-auto">
+                                {{ form.status(class_="form-control")}}
+                            </div>
+                            {% endfor %}
+                            <input type="hidden" name="num_pages" value="0">
+                            <input type="hidden" name="pages_read" value="0">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-sm btn-primary">Add to shelf</button>
+                            </div>
+                        </form>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
+    {% endfor %}
 </div>
 
-
-  
-
-{% endfor %}
-
+<!-- If there is no search query, show search form -->
+{% else %}
+<div class="row justify-content-center" id="search">
+    <div class="col-md-6">
+        <form action="/search" method="POST" class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Enter a book title or author..." aria-label="Search" name="search">
+            <button class="btn btn-outline-success">Search</button>
+        </form>
+    </div>
+</div>
+{% endif %}
 
 {% endblock %} 
 

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-
+<!-- Cover Carousel -->
 <div id="cover-carousel" class="carousel slide carousel-dark container-fluid" data-bs-ride="carousel" data-bs-interval="false">
     <div class="carousel-inner">
         {% if json['covers'] %}
@@ -30,6 +30,7 @@
     </button>
 </div>
 
+<!-- Flash messages for when a user successfully adds book to shelf -->
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <section class="messages">
@@ -40,24 +41,24 @@
     {% endif %}
 {% endwith %}
 
+<!-- Form to add book to shelf -->
 <div class="d-flex justify-content-center add-shelf">
     <form class="row g-3" method="POST" action="/works/{{ key }}">
         {{ form.hidden_tag() }}
-        {% for field in form if (field.widget.input_type != 'hidden') %}
-        <div class="col-auto">
-            {{ form.status.label }}
-        </div>
-        <div class="col-auto">
-            {{ form.status(class_="form-control")}}
-        </div>
-        {% endfor %}
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Add to shelf</button>
-        </div>
+            {% for field in form if (field.widget.input_type != 'hidden') %}
+                <div class="form-group">
+                    <small>{{ field.label(class_="form-label") }}</small>
+                <!-- </div>
+                <div class="col-auto"> -->
+                    {{ field(class_="form-control") }}
+                </div>
+            {% endfor %}
+        <button type="submit" class="btn btn-sm btn-primary">Add to shelf</button>
     </form>
 </div>
-  
 
+  
+<!-- Book info -->
 <div class="container-fluid book-info">
     <h2>{{ json['title'] }}</h2>
     <h5>By: {{ ', '.join(authors) }}</h5>

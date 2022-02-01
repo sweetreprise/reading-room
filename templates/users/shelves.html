@@ -3,6 +3,39 @@
 {% block content %}
 
 <div class="container" id="shelves-container">
+    <span>
+        {% if reading or empty %}
+        Reading |
+        <a href="/shelves/{{ user.username}}/1"> Finished Reading</a> |
+        <a href="/shelves/{{ user.username}}/2"> Future Reads</a>
+        {% elif finished_reading or empty %}
+        <a href="/shelves/{{ user.username}}/0">Reading</a> |
+        Finished Reading |
+        <a href="/shelves/{{ user.username}}/2"> Future Reads</a>
+        {% else %}
+        <a href="/shelves/{{ user.username}}/0">Reading</a> |
+        <a href="/shelves/{{ user.username}}/1">Finished Reading</a> | 
+        Future Reads
+        {% endif %}
+    </span>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <section class="messages">
+        {% for category, msg in messages %}
+        <p class="text-center text-{{ category }}">{{ msg }}</p>
+        {% endfor %}
+    </section>
+    {% endif %}
+    {% endwith %}
+
+    <!-- If there are no books in a shelf, display empty message -->
+    {% if empty %}
+    <p>This list is empty <i class="far fa-frown"></i> Use the search bar above to add a book!</p>
+
+    <!-- Shows READING entries -->
+    {% elif reading %}
     <h3>Reading</h3>
     <table id="reading">
         <tr>
@@ -18,13 +51,15 @@
             <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
             <td>{{ book.book.author_name }}</td>
             <td>{{ book.num_pages }}</td>
-            <td>{{ book.progress }}</td>
-            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/edit">Edit</a></td>
-            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/delete">Delete</a></td>
+            <td>{{ book.progress }}%</td>
+            <td><a href="/shelves/{{ book.book_key }}/edit">Edit</a></td>
+            <td><a href="/shelves/{{ book.book_key }}/delete">Delete</a></td>
         </tr>
         {% endfor %}
     </table>
 
+    <!-- Shows FINISHED READING entries -->
+    {% elif finished_reading %}
     <h3>Finished Reading</h3>
     <table id="finished-reading">
         <tr>
@@ -40,13 +75,15 @@
             <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
             <td>{{ book.book.author_name }}</td>
             <td>{{ book.num_pages }}</td>
-            <td>{{ book.progress }}</td>
-            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/edit">Edit</a></td>
-            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/delete">Delete</a></td>
+            <td>{{ book.progress }}%</td>
+            <td><a href="/shelves/{{ book.book_key }}/edit">Edit</a></td>
+            <td><a href="/shelves/{{ book.book_key }}/delete">Delete</a></td>
         </tr>
         {% endfor %}
     </table>
 
+    <!-- Shows FUTURE READS entries -->
+    {% else %}
     <h3>Future Reads</h3>
     <table id="future-reads">
         <tr>
@@ -62,14 +99,15 @@
             <td><a href="/works/{{ book.book_key }}">{{ book.book.title }}</a></td>
             <td>{{ book.book.author_name }}</td>
             <td>{{ book.num_pages }}</td>
-            <td>{{ book.progress }}</td>
-            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/edit">Edit</a></td>
-            <td><a href="/{{ user.username }}/shelves/{{ book.book_key }}/delete">Delete</a></td>
+            <td>{{ book.progress }}%</td>
+            <td><a href="/shelves/{{ book.book_key }}/edit">Edit</a></td>
+            <td><a href="/shelves/{{ book.book_key }}/delete">Delete</a></td>
         </tr>
         {% endfor %}
     </table>
+    {% endif %}
 </div>
 
-  
+
   
 {% endblock %}

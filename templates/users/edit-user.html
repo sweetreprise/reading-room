@@ -3,6 +3,7 @@
 {% block content %}
 <h1>Edit your profile</h1>
 
+<!-- Edit user form -->
 <div class="row justify-content-center container-fluid">
     <div class="col-md-6 row justify-content-center">
         <form action="/{{ current_user.username }}/edit" method="POST">

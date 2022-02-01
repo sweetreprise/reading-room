@@ -2,57 +2,80 @@
 
 {% block content %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <section class="messages">
+        {% for category, msg in messages %}
+        <p class="text-center text-{{ category }}">{{ msg }}</p>
+        {% endfor %}
+    </section>
+    {% endif %}
+{% endwith %}
+
 <div class="container" id="dashboard">
     <div class="row">
         <div class="col-sm-3 user-info">
           <img src="{{ user.image_url }}" alt="" class="user-img">
           <h3>@{{ user.username }}</h3>
             <div class="row">
-                <div class="col-sm-12 friends">
-                    heya
-                    
+                <div class="col-sm-12">
+                    <small>
+                        <a href="/friends">See friends</a>
+                        <i class="fas fa-star-and-crescent"></i>
+                        <a href="/{{ user.username }}/edit">Edit profile</a>
+                    </small>
                 </div>
             </div>  
-        
         </div>
 
         <div class="col-sm-9">
+            <a href="/shelves/{{ user.username}}"><h3 class="text-center">Bookshelves</h3></a>
             <div class="row">
-                <div class="col-sm-12">
-                    <a href="/{{ user.username }}/shelves"><h3 class="text-center">Reading</h3></a>
-                    <section>
+                <div class="col-sm-12 dash-shelf">
+                    
+                    <section class='reading'>
+                        {% if not reading %}
+                        <p>This list is empty <i class="far fa-frown"></i> Use the search bar above to add a book!</p>
+                        {% else %}
                         {% for book in reading[0:10] %}
                         <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
                         {% endfor %}
                         <br>
+                        {% endif %}
 
-                        <a href="/{{ user.username }}/shelves"><span class="arrow">View list... <i class="fas fa-long-arrow-alt-right"></i></span></a>
+                        <a href="/shelves/{{ user.username}}/0"><span class="arrow">View Reading list... <i class="fas fa-long-arrow-alt-right"></i></span></a>
                     </section>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12">
-                    <a href="/{{ user.username }}/shelves"><h3 class="text-center">Finished Reading</h3></a>
-                    <section>
+                <div class="col-sm-12 dash-shelf">
+                    <section class='finished-reading'>
+                        {% if not finished_reading %}
+                        <p>This list is empty <i class="far fa-frown"></i> Use the search bar above to add a book!</p>
+                        {% else %}
                         {% for book in finished_reading[0:10] %}
                         <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
                         {% endfor %}
                         <br>
+                        {% endif %}
                         
-                        <a href="/{{ user.username }}/shelves"><span class="arrow">View list... <i class="fas fa-long-arrow-alt-right"></i></span></a>
+                        <a href="/shelves/{{ user.username}}/1"><span class="arrow">View Finished Reading list... <i class="fas fa-long-arrow-alt-right"></i></span></a>
                     </section>
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12">
-                    <a href="/{{ user.username }}/shelves"><h3 class="text-center">Future Reads</h3></a>
-                    <section>
+                <div class="col-sm-12 dash-shelf">
+                    <section class='future-reads'>
+                        {% if not future_reads %}
+                        <p>This list is empty <i class="far fa-frown"></i> Use the search bar above to add a book!</p>
+                        {% else %}
                         {% for book in future_reads[0:10] %}
                         <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
                         {% endfor %}
                         <br>
+                        {% endif %}
 
-                        <a href="/{{ user.username }}/shelves"><span class="arrow">View list... <i class="fas fa-long-arrow-alt-right"></i></span></a>
+                        <a href="/shelves/{{ user.username}}/2"><span class="arrow">View Future Reads list... <i class="fas fa-long-arrow-alt-right"></i></span></a>
                     </section>
                 </div>
             </div>

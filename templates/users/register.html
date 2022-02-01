@@ -5,6 +5,7 @@
 <h1 class="text-center">Register</h1>
 <p class="text-center">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
 
+<!-- Flash messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <section class="messages">
@@ -15,6 +16,7 @@
     {% endif %}
 {% endwith %}
 
+<!-- Register Form -->
 <div class="row justify-content-center">
     <div class="col-md-6">
         <form action="{{ url_for('register') }}" method="POST">

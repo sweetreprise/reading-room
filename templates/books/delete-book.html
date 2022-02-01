@@ -2,5 +2,10 @@
 
 {% block content %}
 
-<h3>Read only form?</h3>
+<div class="container delete-book">
+    <p>Are you sure you want to delete <i>{{ book.book.title }}</i> from your shelf?</p>
+    <form action="/shelves/{{ book.book_key }}/delete" method='POST'>
+        <button class='btn btn-danger'>Yes, Delete it.</button>
+    </form>
+</div>
 {% endblock %}

@@ -2,11 +2,11 @@
 
 {% block content %}
 
-<h1>Edit book entry</h1>
+<h4><i>{{ book.book.title }}</i></h4>
 
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <form action="{{ url_for('register') }}" method="POST">
+        <form action="/shelves/{{ book.book_key }}/edit" method="POST">
             {{ form.hidden_tag() }}
             {% for field in form if (field.widget.input_type != 'hidden') %}
             <div class="form-group">
@@ -15,8 +15,8 @@
             </div>
             {% endfor %}
             <br>
-            <button class="btn btn-success">Edit</button>
-            <a href="/{{ user.username }}/shelves">Back</a>
+            <button class="btn btn-success">Submit Edit</button>
+            <a href="/shelves/{{ user.username }}">Back</a>
         </form>
     </div>
 </div>
