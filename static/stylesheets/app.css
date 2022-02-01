@@ -17,6 +17,61 @@ a:link, a:visited {
     cursor: pointer;
 }
 
+.messages {
+    margin: 1em;
+}
+
+h2 {
+    margin-left: 1em;
+    margin-top: 1em;
+}
+
+h4 {
+    text-align: center;
+    padding-top: 1em;
+}
+
+/* FAQ STYLES */
+
+#faq {
+    margin-bottom: 4em;
+}
+
+#faq img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* SEARCH STYLES */
+
+.card img {
+    width: 100%;
+    height: 100%;
+}
+
+.search-header {
+    display:inline-block;
+    text-align: center;
+    margin-top: 1em;
+}
+
+.search-term {
+    font-style: italic;
+}
+
+.search-card {
+    max-width: 540px;
+}
+
+#search {
+    margin: auto;
+    width: 60%;
+    position: relative;
+    top: 20em;
+}
+
+
 /* NAVBAR STYLES */
 .navbar {
     background-color: #2f363b;
@@ -77,10 +132,6 @@ a:link, a:visited {
     text-align: center;
 }
 
-#dashboard .user-info .friends {
-    text-align: left;
-}
-
 #dashboard .user-img {
     border-radius: 50%;
     width: 10em;
@@ -88,13 +139,8 @@ a:link, a:visited {
     margin: auto;
 }
 
-#dashboard .friends {
-    border: 0.5px solid #777;
-}
-
 #dashboard section {
-    padding: 1em;
-    border: 0.5px solid #777;
+    padding: 1.5em;
 }
 
 #dashboard section img {
@@ -106,6 +152,21 @@ a:link, a:visited {
     font-size: small;
 }
 
+#dashboard .dash-shelf {
+    border-radius: 5%;
+}
+
+#dashboard .reading {
+    background-color: rgba(27, 84, 45, 0.6);
+}
+
+#dashboard .finished-reading {
+    background-color: rgba(64, 90, 112, 0.6);
+}
+
+#dashboard .future-reads {
+    background-color: rgba(230, 177, 64, 0.6);
+}
 
 /* CAROUSEL STYLES */
 #cover-carousel {
@@ -144,9 +205,19 @@ a:link, a:visited {
     margin-bottom: 2em;
 }
 
+.add-shelf .form-group {
+    width: 30%;
+    position: relative;
+    left: 2em;
+}
+
+.add-shelf .form-control {
+    margin-right: 0px;
+}
+
 
 /* USER PROFILE */
-.profile-info .rounded-img {
+.profile-info-self .rounded-img, .profile-info-other .rounded-img {
     border-radius: 50%;
     width: 10em;
     height: 10em;
@@ -154,23 +225,36 @@ a:link, a:visited {
     left: 13em;
 }
 
-.profile-info span {
+.profile-info-self span {
     background-color: #f8f9fa;
 }
 
-.profile-info {
+.profile-info-self {
     text-align: left;
+}
+
+.profile-info-other {
+    text-align: center;
 }
 
 /* SHELVES */
 
-#reading, #finished-reading, #future-reads {
+#reading, #finished-reading, #future-reads, #all-reads {
     font-size: small;
 }
 
 #shelves-container th {
     background-color: #2f363b;
     color: white;
+}
+
+#shelves-container h3 {
+    margin-top: 1em;
+}
+
+#shelves-container span {
+    font-size: x-small;
+    margin-left: max-width;
 }
 
 .container tr:nth-of-type(odd) {
@@ -187,4 +271,69 @@ a:link, a:visited {
 
 .container th {
     padding-left: 1em;
+}
+
+.delete-book {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.delete-book p {
+    text-align: center;
+}
+
+/* FRIENDS */
+
+.container .nav-pills {
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+}
+
+.container .tab-content {
+    text-align: center;
+    /* padding: 1em; */
+}
+
+.friend-img {
+    border-radius: 50%;
+    border: 0.5px solid rgb(218, 210, 210);
+    width: 5em;
+    height: 5em;
+    /* position: relative;
+    left: 13em; */
+}
+
+#friend-search-results div {
+    background-color: white;
+    width: fit-content;
+    margin-top: 1em;
+    padding: 1em;
+    border: 0.5px solid rgb(218, 210, 210);
+}
+
+#friend-search-results button {
+    margin-top: 1em;
+    display: block;
+}
+
+.friend-search {
+    margin-top: 2em;
+}
+
+.tab-content .tab-pane {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.tab-content .tab-pane div {
+    margin: 1em;
 }
