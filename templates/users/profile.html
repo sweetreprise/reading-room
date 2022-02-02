@@ -12,7 +12,11 @@
         <p>{{ other_user.description }}</p>
         <footer class="blockquote-footer">{{ other_user.first_name }} {{ other_user.last_name }} in <cite title="Source Title">Source Title</cite></footer>
       </blockquote>
-    <br>
+    
+      
+    <form action="/friends/delete/{{ other_user.id }}" method="POST">
+        <button class="btn btn-sm btn-outline-danger">Remove Friend</button>
+    </form>
 </div>
 
 {% else %}
