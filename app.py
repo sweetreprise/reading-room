@@ -549,11 +549,15 @@ def search():
     response = requests.get("http://openlibrary.org/search.json",
         params={'q': search, 'limit': 50})
     json_obj = response.json()
-    results = json_obj['docs']
+    
+    if json_obj['numFound'] == 0:
+        flash('Sorry! Your search yielded no results. Please try again.', 'danger')
+        return redirect('/search')
+    else:
+        results = json_obj['docs']
+        form = AddBookToShelfForm()
 
-    form = AddBookToShelfForm()
-
-    return render_template('search.html', results=results, search=search, form=form)
+        return render_template('search.html', results=results, search=search, form=form)
 
 
 ###################### HELPER FUNCTIONS ########################
