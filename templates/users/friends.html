@@ -42,25 +42,29 @@
     <div class="tab-content">
         <!-- Friends tab content -->
         <div class="tab-pane fade show active" id="pills-friends" role="tabpanel" aria-labelledby="pills-home-tab">
-            {% if friends %}
+            {% if not friends[0] and not friends[1] %}
+            <p>You don't have any friends <i class="far fa-frown"></i> Use the search bar above to find some!</p>
+            {% endif %}
+
+            {% if f1 %}
                 {% for friend in f1 %}
                     <div>
                         <a href="/{{ friend.user_b.username }}">
                             <img src="{{ friend.user_b.image_url }} " alt="User Profile Image" class="friend-img">
                         </a><br>
-                        <a href="">@{{ friend.user_b.username }}a>
+                        <a href="/{{ friend.user_b.username }}">@{{ friend.user_b.username }}a>
                     </div>
                 {% endfor %}
+            {% endif %}
+            {% if f2 %}
                 {% for friend in f2 %}
                     <div>
                         <a href="/{{ friend.user_a.username }}">
                             <img src="{{ friend.user_a.image_url }} " alt="User Profile Image" class="friend-img">
                         </a><br>
-                        <a href="">@{{ friend.user_a.username }}</a>
+                        <a href="/{{ friend.user_a.username }}">@{{ friend.user_a.username }}</a>
                     </div>
                 {% endfor %}
-            {% else %}
-                <p>You don't have any friends <i class="far fa-frown"></i> Use the search bar above to find some!</p>
             {% endif %}
         </div>
 

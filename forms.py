@@ -13,15 +13,6 @@ class RegisterForm(FlaskForm):
     last_name = StringField('Last name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20)])
 
-    # @classmethod
-    # def validate_username(self, username):
-    #     existing_username = User.query.filter_by(username=username.data).first()
-
-    #     if existing_username:
-    #         raise ValidationError(
-    #             "That username already exists. Please choose a different one"
-            # )
-
 class LoginForm(FlaskForm):
     """Form to login a user"""
 

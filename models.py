@@ -50,7 +50,6 @@ class Request(db.Model):
     )
 
     user_a = db.relationship('User', foreign_keys=[user_a_id], backref="sent_requests")
-
     user_b = db.relationship('User', foreign_keys=[user_b_id], backref="received_requests")
 
 
@@ -98,14 +97,11 @@ class User(db.Model, UserMixin):
 
     shelves = db.relationship('Shelf')
 
-
-
     def __repr__(self):
         """Provides some helpful representation about the user when printed."""
 
         return f"<User #{self.id}: {self.username}"
 
-    
     @classmethod
     def register(cls, username, first_name, last_name, password):
         """Register a user, hashes password"""
@@ -203,7 +199,7 @@ class Shelf(db.Model):
         db.ForeignKey('books.key', ondelete='cascade'),
         nullable=False
     )
-    # options for statuses here will be: reading, finished, future reads
+    # options for statuses here will be: reading, finished, future-reads
     status = db.Column(
         db.String(20),
         nullable=False
