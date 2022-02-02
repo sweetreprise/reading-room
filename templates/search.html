@@ -2,6 +2,8 @@
 
 {% block content %}
 
+
+
 {% if results %}
 <div class="container">
     <h3 class="search-header">Search Results for...</h3>
@@ -65,6 +67,18 @@
                 <input class="form-control me-2" type="search" placeholder="Enter a book title or author..." aria-label="Search" name="search">
             <button class="btn btn-outline-success">Search</button>
         </form>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <section class="messages">
+            {% for category, msg in messages %}
+            <p class="text-center text-{{ category }}">{{ msg }}</p>
+            {% endfor %}
+        </section>
+        {% endif %}
+        {% endwith %}
+
     </div>
 </div>
 {% endif %}
