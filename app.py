@@ -191,7 +191,6 @@ def add_book_to_shelf(key):
 
 ###################### USER ROUTES ########################
 
-
 @app.route('/<string:username>')
 @login_required
 def profile(username):
@@ -464,21 +463,29 @@ def accept_request(user_id):
 @app.route('/friends/delete/<int:user_id>', methods=['POST'])
 @login_required
 def delete_request(user_id):
-    """Deletes a user's friend request."""
+    """Deletes a user's friend request/friend"""
 
-    friend_request = Request.query.filter_by(
+    fr1 = Request.query.filter_by(
         user_a_id=current_user.id,
         user_b_id=user_id,
-        status="Pending"
     ).first()
 
-    db.session.delete(friend_request)
-    db.session.commit()
-    flash('Your friend request has been deleted.', 'success')
+    fr2 = Request.query.filter_by(
+        user_a_id=user_id,
+        user_b_id=current_user.id,
+    ).first()
+
+    if fr1:
+        db.session.delete(fr1)
+        db.session.commit()
+        flash('Your friend request has been deleted.', 'success')
+    if fr2:
+        db.session.delete(fr2)
+        db.session.commit()
+        flash('Your friend request has been deleted.', 'success')
 
     return redirect('/friends')
     
-
 #helper function
 def check_request_status(user_a_id, user_b_id):
     """Checks the friend status between two users. Returns the status."""
@@ -512,7 +519,7 @@ def get_friend_requests(user_id):
 
 #helper function
 def get_friends(user_id):
-    """Returns a users friends.
+    """Returns a user's friends.
     This returns a list of lists of friends.
     The query objects are separated depending on whichever column name
     (user_a_id or user_b_id) contains the current user's id.
@@ -597,7 +604,7 @@ def check_valid_desc(json):
                 have a description under the key 'description' OR have a description
                 under the nested key 'value' """
 
-    if 'description' not in json.keys():
+    if 'description' not in json:
         desc = "No description available"
     elif type(json['description']) == str:
         desc = json['description']
@@ -642,7 +649,7 @@ def get_author(json_obj):
 
 #helper function
 def get_books_array(shelves):
-    """Returns a list of lists. Each nested list is sorted from their status."""
+    """Returns a list of lists. Each nested list is sorted according to their status."""
     reading = []
     finished_reading = []
     future_reads = []
