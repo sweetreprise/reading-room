@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, ValidationError, SelectField, IntegerField
-from wtforms.validators import DataRequired, Length, Optional, NumberRange
+from wtforms.validators import DataRequired, Length, NumberRange
 from models import User
 
 class RegisterForm(FlaskForm):
@@ -26,6 +26,7 @@ class UserEditForm(FlaskForm):
     first_name = StringField('First name', validators=[DataRequired()])
     last_name = StringField('Last name', validators=[DataRequired()])
     description = TextAreaField('Description')
+    location = StringField('location')
     image_url = TextAreaField('User photo')
     password = PasswordField('Password', validators=[Length(min=8, max=20)])
 
@@ -38,8 +39,8 @@ class EditBookForm(FlaskForm):
     """Form for a user to edit a book on their shelf"""
 
     status = SelectField('Status', choices=[('reading', 'Reading'), ('finished-reading', 'Finished Reading'), ('future-reads', 'Future Reads')])
-    num_pages = IntegerField('Number of pages', default=0, validators=[Optional(), NumberRange(min=0)])
-    pages_read = IntegerField('Pages Read', default=0, validators=[Optional(), NumberRange(min=0)])
+    num_pages = IntegerField('Number of pages', default=0, validators=[DataRequired(), NumberRange(min=0)])
+    pages_read = IntegerField('Pages Read', default=0, validators=[DataRequired(), NumberRange(min=0)])
 
 
     
