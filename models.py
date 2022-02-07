@@ -84,6 +84,10 @@ class User(db.Model, UserMixin):
         db.Text,
         default=None
     )
+    location = db.Column(
+        db.Text,
+        default="Somewhere"
+    )
     image_url = db.Column(
         db.Text,
         default=DEFAULT_USER_IMG
