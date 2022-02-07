@@ -137,9 +137,14 @@ def get_book_info(key):
     json_obj = response.json()
 
     authors = get_author(json_obj)
-    form = EditBookForm()
+    book = Shelf.query.filter_by(user_id=current_user.id, book_key=key).first()
 
-    return render_template('books/info.html', json=json_obj, authors=authors, form=form, key=key)
+    if book:
+        form = EditBookForm(obj=book)
+    else:
+        form = EditBookForm()
+
+    return render_template('books/info.html', json=json_obj, authors=authors, form=form, key=key, book=book)
 
 
 @app.route('/works/<string:key>', methods=['POST'])
@@ -172,6 +177,11 @@ def add_book_to_shelf(key):
             entry.progress=progress
             entry.num_pages=num_pages
             entry.pages_read=pages_read
+
+            db.session.add(entry)
+            db.session.commit()
+
+            flash('You have updated your shelf!', 'success')
     else:
         entry = Shelf(
             user_id=user.id,
@@ -181,10 +191,11 @@ def add_book_to_shelf(key):
             pages_read=pages_read,
             progress=progress
         )
-    db.session.add(entry)
-    db.session.commit()
+            
+        db.session.add(entry)
+        db.session.commit()
 
-    flash('Successfully added to your shelf!', 'success')
+        flash('Added to your shelf!', 'success')
 
     return redirect(f'/works/{key}')
 
@@ -194,13 +205,23 @@ def add_book_to_shelf(key):
 @app.route('/<string:username>')
 @login_required
 def profile(username):
-    """Show's user's info."""
+    """Show's a user's info."""
 
     curr_user = User.query.get_or_404(current_user.id)
     other_user = User.query.filter_by(username=username).first()
 
+    friends = [Request.query.filter_by(
+        user_a_id=curr_user.id,
+        user_b_id=other_user.id,
+        status="Friends"
+        ).first(), Request.query.filter_by(
+        user_a_id=other_user.id,
+        user_b_id=curr_user.id,
+        status="Friends"
+        ).first()]
+
     if other_user:
-        return render_template('users/profile.html', curr_user=curr_user, other_user=other_user)
+        return render_template('users/profile.html', curr_user=curr_user, other_user=other_user, friends=friends)
     else:
         flash('Oops! That is not a valid url.', 'danger')
         return redirect('/dashboard')
@@ -259,6 +280,8 @@ def reading(username):
 
     books_array = get_books_array(shelves)
     reading = books_array[0]
+    #set reading variable to differentiate which link is highlighted on the template
+    reading_true = True
 
     if not reading:
         empty = True
@@ -266,9 +289,9 @@ def reading(username):
         empty = False
     
     if user.id == current_user.id: 
-        return render_template('users/shelves.html', user=user, reading=reading, empty=empty)
+        return render_template('users/shelves.html', user=user, reading=reading, empty=empty, reading_true=reading_true)
     else:
-        return render_template('users/friend-shelves.html', user=user, reading=reading, empty=empty)
+        return render_template('users/friend-shelves.html', user=user, reading=reading, empty=empty, reading_true=reading_true)
 
 
 @app.route('/shelves/<string:username>/1')
@@ -286,6 +309,8 @@ def finished(username):
 
     books_array = get_books_array(shelves)
     finished_reading = books_array[1]
+    #set finished reading variable to differentiate which link is highlighted on the template
+    finished_reading_true = True
 
     if not finished_reading:
         empty = True
@@ -293,9 +318,9 @@ def finished(username):
         empty = False
 
     if user.id == current_user.id: 
-        return render_template('users/shelves.html', user=user, finished_reading=finished_reading, empty=empty)
+        return render_template('users/shelves.html', user=user, finished_reading=finished_reading, empty=empty, finished_reading_true=finished_reading_true)
     else:
-        return render_template('users/friend-shelves.html', user=user, finished_reading=finished_reading, empty=empty)
+        return render_template('users/friend-shelves.html', user=user, finished_reading=finished_reading, empty=empty, finished_reading_true=finished_reading_true)
 
 
 @app.route('/shelves/<string:username>/2')
@@ -553,8 +578,7 @@ def search():
     """Searches for books."""
 
     search = request.form['search']
-    response = requests.get("http://openlibrary.org/search.json",
-        params={'q': search, 'limit': 50})
+    response = requests.get("http://openlibrary.org/search.json", params={'q': search, 'limit': 50})
     json_obj = response.json()
     
     if json_obj['numFound'] == 0:
@@ -562,7 +586,14 @@ def search():
         return redirect('/search')
     else:
         results = json_obj['docs']
-        form = AddBookToShelfForm()
+        for book in results:
+            key = book['key'][7:]
+            book_exist = Shelf.query.filter_by(user_id=current_user.id, book_key=key).first()
+
+            if book_exist:
+                form = AddBookToShelfForm(obj=book)
+            else:
+                form = AddBookToShelfForm()
 
         return render_template('search.html', results=results, search=search, form=form)
 

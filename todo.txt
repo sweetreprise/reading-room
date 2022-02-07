@@ -1,5 +1,5 @@
-
-- upload form for editing profile photo
 - pagination for results
 - 404 page
-- add loc in user class
+- fix password - spaces
+- fix addbookshelf form input - use JS
+- loader

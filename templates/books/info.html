@@ -48,12 +48,14 @@
             {% for field in form if (field.widget.input_type != 'hidden') %}
                 <div class="form-group">
                     <small>{{ field.label(class_="form-label") }}</small>
-                <!-- </div>
-                <div class="col-auto"> -->
                     {{ field(class_="form-control") }}
                 </div>
             {% endfor %}
+        {% if book %}
+        <button type="submit" class="btn btn-sm btn-primary">Update Shelf</button>
+        {% else %}
         <button type="submit" class="btn btn-sm btn-primary">Add to shelf</button>
+        {% endif %}
     </form>
 </div>
 

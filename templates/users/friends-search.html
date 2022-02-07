@@ -2,10 +2,11 @@
 
 {% block content %}
 
+<!-- Search bar for friends -->
 <div class="row justify-content-center friend-search">
     <div class="col-md-6">
         <form class="d-flex" action="/friends/search">
-            <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Find Friend" name="q">
+            <input class="form-control me-2" type="search" placeholder="Search for user..." aria-label="Find Friend" name="q">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
     </div>
@@ -26,10 +27,11 @@
     {% endif %}
     {% endwith %}
 
+    <!-- Search results for friend search -->
     {% if search_results %}
     <div>
         {% for user in search_results %}
-        <a href="/{{ user.username }}"></a><img src="{{ user.image_url }}" alt="User profile image" class="friend-img">
+        <a href="/{{ user.username }}"><img src="{{ user.image_url }}" alt="User profile image" class="friend-img"></a>
         <hr>
         <p class="text-center">
             <a href="/{{user.username }}">@{{ user.username }}</a>
@@ -41,6 +43,8 @@
         </p>
         {% endfor %}
     </div>
+
+    <!-- If no search results -->
     {% else %}
     <p>Sorry, your search yielded no results!</p>
     {% endif %}
