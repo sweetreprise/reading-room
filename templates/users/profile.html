@@ -10,13 +10,14 @@
     <a href="shelves/{{ other_user.username }}">Visit Bookshelf</a>
     <blockquote class="blockquote text-center">
         <p>{{ other_user.description }}</p>
-        <footer class="blockquote-footer">{{ other_user.first_name }} {{ other_user.last_name }} in <cite title="Source Title">Source Title</cite></footer>
+        <footer class="blockquote-footer">{{ other_user.first_name }} {{ other_user.last_name }} in <cite title="Source Title">{{ other_user.location }}</cite></footer>
       </blockquote>
     
-      
+    {% if friends[0] or friends[1] %}
     <form action="/friends/delete/{{ other_user.id }}" method="POST">
         <button class="btn btn-sm btn-outline-danger">Remove Friend</button>
     </form>
+    {% endif %}
 </div>
 
 {% else %}
