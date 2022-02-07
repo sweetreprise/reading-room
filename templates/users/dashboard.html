@@ -37,9 +37,14 @@
                         {% if not reading %}
                         <p>This list is empty <i class="far fa-frown"></i> Use the search bar above to add a book!</p>
                         {% else %}
-                        {% for book in reading[0:10] %}
-                        <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
-                        {% endfor %}
+                            {% for book in reading[0:10] %}
+                                {% if book.book.cover == '/static/images/default-book.png' %}
+                                <a href="/works/{{ book.book_key }}"><img src="{{ book.book.cover }}" alt="book cover"></a>
+                                {% else %}
+
+                                <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
+                                {% endif %}
+                            {% endfor %}
                         <br>
                         {% endif %}
 
@@ -53,9 +58,14 @@
                         {% if not finished_reading %}
                         <p>This list is empty <i class="far fa-frown"></i> Use the search bar above to add a book!</p>
                         {% else %}
-                        {% for book in finished_reading[0:10] %}
-                        <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
-                        {% endfor %}
+                            {% for book in finished_reading[0:10] %}
+                                {% if book.book.cover == '/static/images/default-book.png' %}
+                                <a href="/works/{{ book.book_key }}"><img src="{{ book.book.cover }}" alt="book cover"></a>
+                                {% else %}
+
+                                <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
+                                {% endif %}
+                            {% endfor %}
                         <br>
                         {% endif %}
                         
@@ -69,9 +79,14 @@
                         {% if not future_reads %}
                         <p>This list is empty <i class="far fa-frown"></i> Use the search bar above to add a book!</p>
                         {% else %}
-                        {% for book in future_reads[0:10] %}
-                        <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
-                        {% endfor %}
+                            {% for book in future_reads[0:10] %}
+                                {% if book.book.cover == '/static/images/default-book.png' %}
+                                <a href="/works/{{ book.book_key }}"><img src="{{ book.book.cover }}" alt="book cover"></a>
+                                {% else %}
+
+                                <a href="/works/{{ book.book_key }}"><img src="https://covers.openlibrary.org/b/id/{{ book.book.cover }}-S.jpg" alt="book cover"></a>
+                                {% endif %}
+                            {% endfor %}
                         <br>
                         {% endif %}
 
