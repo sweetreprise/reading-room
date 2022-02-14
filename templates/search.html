@@ -34,7 +34,11 @@
                     </small></p>
 
                     <!-- Quick add Form -->
+
                     <p class="card-text">
+                        {% if book['key'][7:] in book_list %}
+                        <a class="btn btn-sm btn-outline-danger" href="/shelves/{{ book['key'][7:] }}/edit">Edit Entry</a>
+                        {% else %}
                         <form data-id="{{ book['key'] }}" class="row g-3 add-to-shelf" method="POST" action="{{ book['key'] }}">
                             {{ form.hidden_tag() }}
                             {% for field in form if (field.widget.input_type != 'hidden') %}
@@ -48,9 +52,10 @@
                             <input type="hidden" name="num_pages" value="0">
                             <input type="hidden" name="pages_read" value="0">
                             <div class="col-auto">
-                                <button type="submit" class="btn btn-sm btn-primary">Add to shelf</button>
+                                <button type="submit" class="btn btn-sm btn-primary">Add To Shelf</button>
                             </div>
                         </form>
+                        {% endif %}
                     </p>
                 </div>
             </div>
