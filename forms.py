@@ -2,8 +2,8 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, ValidationError, SelectField, IntegerField
-from wtforms.validators import DataRequired, Length, NumberRange
-from models import User
+from wtforms.validators import DataRequired, Length, NumberRange, EqualTo
+import re
 
 class RegisterForm(FlaskForm):
     """Form to register a user"""
@@ -11,7 +11,18 @@ class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     first_name = StringField('First name', validators=[DataRequired()])
     last_name = StringField('Last name', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, max=20), EqualTo('confirm', 'Passwords must match!')])
+    confirm = PasswordField('Confirm password')
+
+    def validate_password(form, password):
+        """Checks if there are any spaces in the user's password.
+        If there is, raise a ValidationError."""
+
+        res = bool(re.search(r"\s", str(password.data)))
+
+        if res:
+            raise ValidationError('Sorry, you cannot have any spaces in your password!')
+
 
 class LoginForm(FlaskForm):
     """Form to login a user"""
