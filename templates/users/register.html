@@ -17,7 +17,7 @@
 {% endwith %}
 
 <!-- Register Form -->
-<div class="row justify-content-center">
+<div class="row justify-content-center" id="form-spacing">
     <div class="col-md-6">
         <form action="{{ url_for('register') }}" method="POST">
             {{ form.hidden_tag() }}

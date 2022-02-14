@@ -2,9 +2,9 @@
 
 {% block content %}
 
-{% if other_user.username != curr_user.username %}
+{% if other_user %}
 
-<div class="container-fluid base-container profile-info-other">
+<div class="container base-container profile-info-other">
     <img src="{{ other_user.image_url }}" alt="user image" class="rounded-img"><br>
     <p>@{{ other_user.username }}</p>
     <a href="shelves/{{ other_user.username }}">Visit Bookshelf</a>
@@ -22,7 +22,7 @@
 
 {% else %}
 
-<div class="container-fluid base-container profile-info-self">
+<div class="container base-container profile-info-self">
     <img src="{{ current_user.image_url }}" alt="user image" class="rounded-img"><br>
     <span><p><b>Username: </b>{{ current_user.username }}</p></span>
     <span><p><b>First name: </b>{{ current_user.first_name }}</p></span>
