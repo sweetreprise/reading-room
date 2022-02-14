@@ -210,18 +210,21 @@ def profile(username):
     curr_user = User.query.get_or_404(current_user.id)
     other_user = User.query.filter_by(username=username).first()
 
-    friends = [Request.query.filter_by(
-        user_a_id=curr_user.id,
-        user_b_id=other_user.id,
-        status="Friends"
-        ).first(), Request.query.filter_by(
-        user_a_id=other_user.id,
-        user_b_id=curr_user.id,
-        status="Friends"
-        ).first()]
+    if other_user and other_user.username != curr_user.username:
+        friends = [Request.query.filter_by(
+            user_a_id=curr_user.id,
+            user_b_id=other_user.id,
+            status="Friends"
+            ).first(), Request.query.filter_by(
+            user_a_id=other_user.id,
+            user_b_id=curr_user.id,
+            status="Friends"
+            ).first()]
 
-    if other_user:
         return render_template('users/profile.html', curr_user=curr_user, other_user=other_user, friends=friends)
+
+    elif curr_user.username == username:
+        return render_template('users/profile.html', curr_user=curr_user)
     else:
         flash('Oops! That is not a valid url.', 'danger')
         return redirect('/dashboard')
@@ -350,6 +353,25 @@ def future(username):
         return render_template('users/friend-shelves.html', user=user, future_reads=future_reads, empty=empty)
 
 
+@app.route('/shelves/<string:book_key>/edit')
+@login_required
+def show_edit_book_form(book_key):
+    """Shows form to edit a book."""
+
+    user = User.query.get_or_404(current_user.id)
+    book = Shelf.query.filter_by(
+        book_key=book_key,
+        user_id=user.id
+    ).first()
+
+    if not book:
+        flash('Oops! That is not a valid url.', 'danger')
+        return redirect(request.referrer)
+    else:
+        form = EditBookForm(obj=book)
+
+    return render_template('books/edit-book.html', form=form, user=user, book=book)
+
 @app.route('/shelves/<string:book_key>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_book(book_key):
@@ -361,15 +383,18 @@ def edit_book(book_key):
         user_id=user.id
     ).first()
 
-    if not book:
-        flash('Oops! That is not a valid url.', 'danger')
+    form = EditBookForm(obj=book)
+
+    status = request.form['status']
+    num_pages = int(request.form['num_pages'])
+    pages_read = int(request.form['pages_read'])
+
+    if int(pages_read) > int(num_pages):
+        flash('Sorry the number of pages read cannot exceed the total number of pages in your book!', 'danger')
         return redirect(request.referrer)
 
-    form = EditBookForm(obj=book)
-    status = form.status.data
-    num_pages = form.num_pages.data
-    pages_read = form.pages_read.data
     progress = Shelf.calculate_progress(status, num_pages, pages_read)
+
 
     if form.validate_on_submit():
         book.status = status
@@ -379,8 +404,8 @@ def edit_book(book_key):
         db.session.commit()
         flash('Successfully edited!', 'success')
         return redirect(f'/shelves/{user.username}')
-    
-    return render_template('books/edit-book.html', form=form, user=user, book=book)
+    else:
+        return render_template('books/edit-book.html', form=form, user=user, book=book)
 
 
 @app.route('/shelves/<string:book_key>/delete', methods=['GET', 'POST'])
@@ -580,22 +605,23 @@ def search():
     search = request.form['search']
     response = requests.get("http://openlibrary.org/search.json", params={'q': search, 'limit': 50})
     json_obj = response.json()
+    book_list = []
     
     if json_obj['numFound'] == 0:
         flash('Sorry! Your search yielded no results. Please try again.', 'danger')
         return redirect('/search')
     else:
         results = json_obj['docs']
+        form = AddBookToShelfForm()
+
         for book in results:
             key = book['key'][7:]
             book_exist = Shelf.query.filter_by(user_id=current_user.id, book_key=key).first()
 
             if book_exist:
-                form = AddBookToShelfForm(obj=book)
-            else:
-                form = AddBookToShelfForm()
+                book_list.append(book_exist.book_key)
 
-        return render_template('search.html', results=results, search=search, form=form)
+        return render_template('search.html', results=results, search=search, form=form, book_list=book_list)
 
 
 ###################### HELPER FUNCTIONS ########################
