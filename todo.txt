@@ -1,5 +1,0 @@
-- pagination for results
-- 404 page
-- fix password - spaces
-- fix addbookshelf form input - use JS
-- loader
