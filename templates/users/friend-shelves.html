@@ -6,11 +6,11 @@
 
 <div class="container" id="shelves-container">
     <span>
-        {% if reading or empty %}
+        {% if reading_true %}
         Reading |
         <a href="/shelves/{{ user.username }}/1"> Finished Reading</a> |
         <a href="/shelves/{{ user.username }}/2"> Future Reads</a>
-        {% elif finished_reading or empty %}
+        {% elif finished_reading_true %}
         <a href="/shelves/{{ user.username }}/0">Reading</a> |
         Finished Reading |
         <a href="/shelves/{{ user.username }}/2"> Future Reads</a>
